@@ -1059,14 +1059,17 @@ ScriptLoader.SeekKey = function ( key ) {
     alert( "Key not found in this chapter." );
 }
 ScriptLoader.NextLine = function () {
-    if ( this.updating ) {
-        this.SetTime( this.config.duration );
+    if ( this.updating && typeof this.last.finish !== 'undefined' && !this.last.finish ) {
+        //this.SetTime( this.config.duration );
+        
+        let act = this.GetLineDuration( this.ResolveLine( this.pointer.line, this.pointer.chapter ).line );
+        this.SetTime(act);
+        this.FinishLine();
         let d = this.chapters[ this.pointer.chapter ];
         if ( this.last.line >= ( d ? d.length : 0 ) - 1 ) {
             alert( "Chapter End." );
         }
-        this.SeekLine( ( this.last.line || 0 ) + 1 );
-    }
+    } else if ( this.updating ) this.SeekLine( ( this.last.line || 0 ) + 1 );
 }
 //auto
 ScriptLoader.AutoRead = function ( enabled ) {
